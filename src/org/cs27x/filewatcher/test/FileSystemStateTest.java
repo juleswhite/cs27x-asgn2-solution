@@ -8,6 +8,7 @@ import java.nio.file.StandardWatchEventKinds;
 import org.cs27x.dropbox.DropboxCmd;
 import org.cs27x.dropbox.DropboxCmd.OpCode;
 import org.cs27x.filewatcher.FileEvent;
+import org.cs27x.filewatcher.FileSystemStateImpl;
 import org.cs27x.filewatcher.FileSystemState;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class FileSystemStateTest {
 	
 	@Before
 	public void setUp(){
-		
+		state_ = new FileSystemStateImpl();
 	}
 	
 	@Test

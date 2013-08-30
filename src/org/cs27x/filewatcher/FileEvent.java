@@ -35,4 +35,8 @@ public class FileEvent {
 	public Kind<?> getEventType() {
 		return eventType_;
 	}
+	
+	public byte[] getData(){
+		return data_;
+	}
 }
