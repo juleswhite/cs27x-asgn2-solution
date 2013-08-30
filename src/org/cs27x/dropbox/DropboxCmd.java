@@ -2,7 +2,9 @@ package org.cs27x.dropbox;
 
 import java.io.Serializable;
 
-public class DropboxCmd implements Serializable {
+import org.cs27x.filewatcher.FileChangeEvent;
+
+public class DropboxCmd implements Serializable, FileChangeEvent {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,6 +31,10 @@ public class DropboxCmd implements Serializable {
 		return path_;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.cs27x.dropbox.FileData#getData()
+	 */
+	@Override
 	public byte[] getData() {
 		return data_;
 	}

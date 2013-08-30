@@ -1,20 +1,31 @@
 package org.cs27x.filewatcher;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cs27x.dropbox.DropboxCmd;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 
 public class FileSystemStateImpl implements FileSystemState {
 
 	private static final int UNININITIALIZED = -2;
 	
 	private Map<String, FileState> states_ = new HashMap<>();
+	
+	private final HashFunction fileHashFunction_;
+	
+	public FileSystemStateImpl(){
+		this(Hashing.md5());
+	}
 
-	private synchronized FileState getOrCreateState(Path p) {
-		String key = p.toString();
+	public FileSystemStateImpl(HashFunction fileHashFunction) {
+		super();
+		fileHashFunction_ = fileHashFunction;
+	}
+
+	private synchronized FileState getOrCreateState(String key) {
+		
 		FileState state = states_.get(key);
 		if (state == null) {
 			state = new FileState(UNININITIALIZED);
@@ -23,29 +34,27 @@ public class FileSystemStateImpl implements FileSystemState {
 		return state;
 	}
 
-	@Override
-	public synchronized boolean updateState(FileEvent evt) {
-		final Path p = evt.getFile();
-		final long size = (evt.getData() != null)? evt.getData().length : UNININITIALIZED;
-		
-		final FileState state = getOrCreateState(p);
-		final boolean update = size != state.getSize();
-		
-		state.setSize(size);
-
-		return update;
+	private boolean hashesMatch(HashCode h1, HashCode h2){
+		return h1 == h2 || (h1 != null && h1.equals(h2));
 	}
-
+	
 	@Override
-	public boolean updateState(DropboxCmd cmd) {
-		final Path p = Paths.get(cmd.getPath());
-		final long size = (cmd.getData() != null) ? cmd.getData().length : 0;
-		
+	public synchronized boolean updateState(FileChangeEvent evt) {
+		final String p = evt.getPath();
 		final FileState state = getOrCreateState(p);
-		final boolean update = size != state.getSize();
-		
+		return updateState(state, evt);
+	}
+	
+	private boolean updateState(FileState state, final FileChangeEvent fd){
+		final byte[] data = (fd.getData() != null)? fd.getData() : new byte[0];
+		final long size = data.length;
+		final HashCode incomingHash = fileHashFunction_.newHasher().putBytes(data).hash();
+			
+		final boolean update = size != state.getSize() || !hashesMatch(incomingHash, state.getFileHash());
+			
 		state.setSize(size);
-		
+		state.setFileHash(incomingHash);
+			
 		return update;
 	}
 

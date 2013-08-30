@@ -29,37 +29,17 @@ import org.cs27x.dropbox.DropboxCmd;
 public interface FileSystemState {
 
 	/**
-	 * This method determines if the DropboxCmd brings the local file state in line
-	 * with the known shared file system state (e.g., the expected state of the shared folder
-	 * across all the hosts). If the DropboxCmd brings the local file system in line
-	 * with the known shared file system state, the method returns true, indicating
-	 * that the cmd should not be executed and applied to the local file system. The method
-	 * also updates the known shared file system state. If the
-	 * cmd represents a change that has already occurred locally, then the method merely
-	 * updates the expected shared file system state with the information in the event and 
-	 * returns false to indicate that the cmd should not be executed. 
+	 * This method determines if the FileChangeEvent describes a change in the shared
+	 * file system state that the FileSystemState is not already aware of. If it is
+	 * not aware of the change, it updates its knowledge of the shared file system
+	 * state and then returns true indicating that the event should be propagated. If
+	 * the change is already known, the method returns false indicating that the event
+	 * should not be propagated.
 	 * 
 	 * 
 	 * @param evt
 	 * @return
 	 */
-	public boolean updateState(DropboxCmd cmd);
-	
-	/**
-	 * This method determines if the FileEvent brings the local file state in line
-	 * with the known shared file system state (e.g., the expected state of the shared folder
-	 * across all the hosts). If the FileEvent brings the local file system in line
-	 * with the known shared file system state, the method returns false, indicating
-	 * that the event should not be propagated. If the
-	 * FileEvent represents a local change that needs to be propagated to the 
-	 * shared file system, then the method updates the expected shared file system
-	 * state with the information in the event and returns true to indicate that the
-	 * event should be propagated. 
-	 * 
-	 * 
-	 * @param evt
-	 * @return
-	 */
-	public boolean updateState(FileEvent evt);
+	public boolean updateState(FileChangeEvent cmd);
 	
 }
