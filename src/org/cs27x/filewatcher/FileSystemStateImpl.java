@@ -15,6 +15,11 @@ public class FileSystemStateImpl implements FileSystemState {
 	
 	private final HashFunction fileHashFunction_;
 	
+	/**
+	 * Initializes the class with MD5 hashing to
+	 * check for file changes.
+	 * 
+	 */
 	public FileSystemStateImpl(){
 		this(Hashing.md5());
 	}

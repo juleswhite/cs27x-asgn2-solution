@@ -2,6 +2,14 @@ package org.cs27x.filewatcher;
 
 import com.google.common.hash.HashCode;
 
+/**
+ * A file state object represents the expected
+ * state of a file in the shared file system.
+ * File state is tracked based on size and hashcode.
+ * 
+ * @author jules
+ *
+ */
 public class FileState {
 
 	private long size_;

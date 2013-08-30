@@ -38,6 +38,35 @@ public class FileSystemStateTest {
 	}
 	
 	@Test
+	public void testRemoteCmdRemoveAcceptWhenNotInSync() {
+		
+		byte[] fileData = new byte[1024];
+		FileEvent evt = new FileEvent(StandardWatchEventKinds.ENTRY_CREATE, Paths.get(TEST_FILE), fileData);
+		
+		assertTrue(state_.updateState(evt));
+		
+		DropboxCmd cmd = new DropboxCmd(OpCode.REMOVE, TEST_FILE);
+		assertTrue(state_.updateState(cmd));
+		assertFalse(state_.updateState(cmd));
+	}
+	
+	@Test
+	public void testRemoteCmdRemoveAcceptWithUnknownFile() {
+
+		DropboxCmd cmd = new DropboxCmd(OpCode.REMOVE, TEST_FILE);
+		assertTrue(state_.updateState(cmd));
+		assertFalse(state_.updateState(cmd));
+	}
+	
+	@Test
+	public void testRemoteCmdUpdateAcceptWithUnknownFile() {
+
+		DropboxCmd cmd = new DropboxCmd(OpCode.UPDATE, TEST_FILE);
+		assertTrue(state_.updateState(cmd));
+		assertFalse(state_.updateState(cmd));
+	}
+	
+	@Test
 	public void testRemoteCmdCreateAcceptWhenNotInSync() {
 		
 		byte[] fileData = new byte[1024];

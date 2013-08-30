@@ -1,9 +1,19 @@
 package org.cs27x.dropbox;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 import org.cs27x.filewatcher.FileChangeEvent;
 
+/**
+ * A DropboxCmd represents a change to the shared file
+ * system that needs to be executed on each client.
+ * 
+ * 
+ * @author jules
+ *
+ */
 public class DropboxCmd implements Serializable, FileChangeEvent {
 
 	private static final long serialVersionUID = 1L;
@@ -43,4 +53,21 @@ public class DropboxCmd implements Serializable, FileChangeEvent {
 		return opCode_;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(opCode_, path_, data_);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof DropboxCmd && equals((DropboxCmd)obj);
+	}
+	
+	public boolean equals(DropboxCmd cmd){
+		return Objects.equals(opCode_, cmd.getOpCode()) 
+			&& Objects.equals(path_, cmd.getPath())
+			&& Arrays.equals(data_, cmd.getData());
+	}
+
+	
 }
