@@ -1,5 +1,7 @@
 package org.cs27x.filewatcher;
 
+import java.io.IOException;
+
 /**
  * 
  * This is the interface for classes that can watch a file system
@@ -35,5 +37,17 @@ public interface FileEventSource {
 	 * @param listener
 	 */
 	public void removeListener(FileEventListener listener);
+	
+	
+	/**
+	 * Start sending events.
+	 */
+	public void start() throws IOException;
+	
+	/**
+	 * Stop sending events.
+	 * @throws IOException
+	 */
+	public void stop();
 	
 }

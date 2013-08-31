@@ -10,12 +10,15 @@ import java.util.Map;
 import org.cs27x.dropbox.DropboxCmd.OpCode;
 import org.cs27x.filewatcher.FileEvent;
 import org.cs27x.filewatcher.FileEventListener;
+import org.cs27x.filewatcher.FileEventSource;
 import org.cs27x.filewatcher.FileSystemState;
 import org.cs27x.filewatcher.FileSystemStateImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * The DropboxClient is responsible for translating incoming DropboxCmds
@@ -27,6 +30,7 @@ import com.google.common.collect.ImmutableMap;
  * @author jules
  *
  */
+@Singleton
 public class DropboxClient implements FileEventListener, DropboxCmdListener {
 
 	private static final Logger LOG = LoggerFactory
@@ -65,17 +69,30 @@ public class DropboxClient implements FileEventListener, DropboxCmdListener {
 	private final FileSystemState fileSystemState_;
 	private final FileManager fileManager_;
 	private final DropboxTransport transport_;
+	private final FileEventSource fileEvents_;
 
 	public DropboxClient(FileManager fileManager, DropboxTransport transport) {
-		this(new FileSystemStateImpl(), fileManager, transport);
+		this(new FileSystemStateImpl(), null, fileManager, transport);
 	}
 
+	@Inject
 	public DropboxClient(FileSystemState fileSystemState,
-			FileManager fileManager, DropboxTransport transport) {
+			FileEventSource fileEvents,
+			FileManager fileManager, 
+			DropboxTransport transport) {
 		super();
+		fileEvents_ = fileEvents;
 		fileSystemState_ = fileSystemState;
 		fileManager_ = fileManager;
 		transport_ = transport;
+		
+		if(transport_ != null){
+			transport_.addCmdListener(this);
+		}
+		if(fileEvents_ != null){
+			fileEvents_.addListener(this);
+		}
+		
 	}
 
 	

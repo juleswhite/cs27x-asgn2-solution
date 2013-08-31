@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import com.google.inject.Inject;
 
 public class FileSystemStateImpl implements FileSystemState {
 
@@ -20,6 +21,7 @@ public class FileSystemStateImpl implements FileSystemState {
 	 * check for file changes.
 	 * 
 	 */
+	@Inject
 	public FileSystemStateImpl(){
 		this(Hashing.md5());
 	}

@@ -20,6 +20,7 @@ import org.cs27x.dropbox.DropboxTransport;
 import org.cs27x.dropbox.FileManager;
 import org.cs27x.filewatcher.FileChangeEvent;
 import org.cs27x.filewatcher.FileEvent;
+import org.cs27x.filewatcher.FileEventSource;
 import org.cs27x.filewatcher.FileSystemState;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +38,8 @@ public class DropboxClientTest {
 	
 	@Before
 	public void setUp(){
+		FileEventSource es = mock(FileEventSource.class);
+		
 		fileSystemState_ = mock(FileSystemState.class);
 		when(fileSystemState_.updateState(any(FileChangeEvent.class))).thenReturn(true);
 		
@@ -45,7 +48,7 @@ public class DropboxClientTest {
 		when(fileManager_.resolve(any(String.class))).thenReturn(TEST_FILE_RESOLVED_PATH);
 		
 		transport_ = mock(DropboxTransport.class);
-		client_ = new DropboxClient(fileSystemState_, fileManager_, transport_);
+		client_ = new DropboxClient(fileSystemState_, es, fileManager_, transport_);
 	}
 	
 	@Test

@@ -3,6 +3,7 @@ package org.cs27x.dropbox;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.inject.Singleton;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.Join;
 import com.hazelcast.config.NetworkConfig;
@@ -14,6 +15,7 @@ import com.hazelcast.core.MembershipListener;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 
+@Singleton
 public class HazelcastTransport implements DropboxTransport,
 		MessageListener<DropboxCmd>, MembershipListener {
 
@@ -27,6 +29,7 @@ public class HazelcastTransport implements DropboxTransport,
 
 	private List<DropboxCmdListener> cmdListeners_ = new LinkedList<>();
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void connect(String initialPeer) {
 		if (initialPeer != null) {
@@ -52,10 +55,12 @@ public class HazelcastTransport implements DropboxTransport,
 		checkConnected();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void disconnect() {
 		Hazelcast.shutdown();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void checkConnected() {
 		Cluster cluster = Hazelcast.getCluster();
 		if (cluster.getMembers().size() > 1 && !connected_) {

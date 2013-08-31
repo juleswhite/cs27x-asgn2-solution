@@ -1,5 +1,6 @@
 package org.cs27x.filewatcher;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
@@ -7,7 +8,9 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -16,6 +19,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.cs27x.dropbox.FileManager;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
+@Singleton
 public class FileWatcherSource implements FileEventSource {
 
 
@@ -43,13 +53,17 @@ public class FileWatcherSource implements FileEventSource {
 	private List<FileEventListener> fileHandlers_ = new ArrayList<>();
 	private boolean running_;
 
-	public FileWatcherSource(Path toWatch, ExecutorService executor) {
+	@Inject
+	public FileWatcherSource(@Named(FileManager.ROOT_DIR) String toWatch, ExecutorService executor) {
 		super();
-		toWatch_ = toWatch.toAbsolutePath();
+		toWatch_ = Paths.get(toWatch).toAbsolutePath();
 		executor_ = executor;
+		
+		checkArgument(Files.exists(toWatch_),
+				"The shared directory for the Dropbox application must exist.");
 	}
 
-	public FileWatcherSource(Path toWatch) {
+	public FileWatcherSource(String toWatch) {
 		this(toWatch, Executors.newSingleThreadExecutor());
 	}
 

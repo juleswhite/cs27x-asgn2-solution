@@ -4,20 +4,21 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public interface FileManager {
-	
+
+	public static final String ROOT_DIR = "rootDir";
+
 	/**
-	 * This method converts a path that is possibly specific
-	 * to the host into a relative path to the shared file system.
+	 * This method converts a path that is possibly specific to the host into a
+	 * relative path to the shared file system.
 	 * 
 	 * @param relativePathName
 	 * @return
 	 */
 	public Path ensureRelative(Path path);
-	
+
 	/**
-	 * This method resolves a relative path from the shared
-	 * file system to an absolute path tied to the host that
-	 * the FileManager is operating on.
+	 * This method resolves a relative path from the shared file system to an
+	 * absolute path tied to the host that the FileManager is operating on.
 	 * 
 	 * @param relativePathName
 	 * @return
@@ -25,9 +26,8 @@ public interface FileManager {
 	public Path resolve(String relativePathName);
 
 	/**
-	 * This method returns true if the specified
-	 * path exists on the file system that the
-	 * FileManager is operating on.
+	 * This method returns true if the specified path exists on the file system
+	 * that the FileManager is operating on.
 	 * 
 	 * @param p
 	 * @return
@@ -35,9 +35,8 @@ public interface FileManager {
 	public boolean exists(Path p);
 
 	/**
-	 * This method writes the specified data to the given
-	 * path on the file system that the FileManager is
-	 * operating on.
+	 * This method writes the specified data to the given path on the file
+	 * system that the FileManager is operating on.
 	 * 
 	 * @param p
 	 * @param data
@@ -47,9 +46,8 @@ public interface FileManager {
 	public void write(Path p, byte[] data, boolean overwrite)
 			throws IOException;
 
-	
 	/**
-	 * This method deletes the specified path on the file system that the 
+	 * This method deletes the specified path on the file system that the
 	 * FileManager is operating on.
 	 * 
 	 * @param p
@@ -59,5 +57,4 @@ public interface FileManager {
 	 */
 	public void delete(Path p) throws IOException;
 
-	
 }

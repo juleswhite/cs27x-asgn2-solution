@@ -1,6 +1,5 @@
 package org.cs27x.filewatcher;
 
-import org.cs27x.dropbox.DropboxCmd;
 
 /**
  * A FileSystemState is responsible for holding what the Dropbox application

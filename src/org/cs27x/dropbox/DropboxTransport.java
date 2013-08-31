@@ -13,6 +13,8 @@ public interface DropboxTransport {
 
 	public void connect(String host);
 	
+	public void disconnect();
+	
 	public boolean isConnected();
 	
 	public void publish(DropboxCmd cmd);
