@@ -17,6 +17,12 @@ public interface DropboxTransport {
 	
 	public void publish(DropboxCmd cmd);
 	
-	public void addListener(DropboxCmdListener hdlr);
+	public void addCmdListener(DropboxCmdListener hdlr);
+	
+	public void removeCmdListener(DropboxCmdListener hdlr);
+	
+	public void addTransportListener(DropboxTransportListener l);
+	
+	public void removeTransportListener(DropboxTransportListener l);
 	
 }
